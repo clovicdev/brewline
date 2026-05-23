@@ -1,0 +1,118 @@
+/*
+ * BreweryX Bukkit-Plugin for an alternate brewing process
+ * Copyright (C) 2024 The Brewery Team
+ *
+ * This file is part of BreweryX.
+ *
+ * BreweryX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * BreweryX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with BreweryX. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+ */
+
+package me.clovic.brewline.utility.releases;
+
+import me.clovic.brewline.BrewlinePlugin;
+import me.clovic.brewline.configuration.ConfigManager;
+import me.clovic.brewline.configuration.files.Config;
+import me.clovic.brewline.configuration.files.Lang;
+import me.clovic.brewline.utility.releases.impl.GitHubReleaseChecker;
+import me.clovic.brewline.utility.releases.impl.GithubSnapshotsReleaseChecker;
+import me.clovic.brewline.utility.releases.impl.NoImplReleaseChecker;
+import me.clovic.brewline.utility.releases.impl.SpigotReleaseChecker;
+import lombok.Getter;
+import org.bukkit.command.CommandSender;
+
+import java.util.concurrent.CompletableFuture;
+
+@Getter
+public abstract class ReleaseChecker {
+
+    protected static final String CONST_UNRESOLVED = "UNRESOLVED";
+    private static ReleaseChecker instance;
+
+    protected String resolvedLatestVersion = CONST_UNRESOLVED; // Latest version of BX resolved from the source
+
+
+    public abstract CompletableFuture<String> resolveLatest();
+
+    public abstract CompletableFuture<Boolean> checkForUpdate();
+
+    public abstract String getDownloadURL();
+
+
+    public void notify(CommandSender receiver) {
+        if (receiver.hasPermission("brewline.update") && isUpdateAvailable()) {
+            Lang lang = ConfigManager.getConfig(Lang.class);
+            lang.sendEntry(receiver, "Etc_NewRelease", "v" + localVersion(), "v" + resolvedLatestVersion, getDownloadURL());
+        }
+    }
+
+
+    public boolean isUpdateAvailable() {
+        if (resolvedLatestVersion.equals(CONST_UNRESOLVED)) {
+            return false;
+        }
+        int local = parseVersion(localVersion());
+        int resolved = parseVersion(resolvedLatestVersion);
+        return resolved > local;
+    }
+
+
+    // Singleton
+
+    public static ReleaseChecker getInstance(boolean newInstance) {
+        if (instance != null && !newInstance) {
+            return instance;
+        }
+        Config config = ConfigManager.getConfig(Config.class);
+        switch (config.getResolveUpdatesFrom()) {
+            case GITHUB -> instance = new GitHubReleaseChecker("BreweryTeam", "BreweryX");
+            case SNAPSHOTS -> instance = new GithubSnapshotsReleaseChecker("BreweryTeam", "BreweryX");
+            case SPIGOT -> instance = new SpigotReleaseChecker(114777);
+            case NONE -> instance = new NoImplReleaseChecker();
+        }
+        return instance;
+    }
+
+    public static ReleaseChecker getInstance() {
+        return getInstance(false);
+    }
+
+
+    // Util
+    public String localVersion() {
+        String versionString = BrewlinePlugin.getInstance().getDescription().getVersion();
+        if (versionString.contains(";")) {
+            // I don't care about the branch
+            return versionString.split(";")[0];
+        }
+        return versionString;
+    }
+
+    public int parseVersion(String version) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : version.toCharArray()) {
+            if (Character.isDigit(c)) {
+                sb.append(c);
+            }
+        }
+        return Integer.parseInt(sb.toString());
+    }
+
+
+    public enum ReleaseCheckerType {
+        GITHUB,
+        SNAPSHOTS,
+        SPIGOT,
+        NONE
+    }
+}

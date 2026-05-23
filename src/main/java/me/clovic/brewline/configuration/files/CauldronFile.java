@@ -1,0 +1,52 @@
+/*
+ * BreweryX Bukkit-Plugin for an alternate brewing process
+ * Copyright (C) 2024 The Brewery Team
+ *
+ * This file is part of BreweryX.
+ *
+ * BreweryX is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * BreweryX is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with BreweryX. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+ */
+
+package me.clovic.brewline.configuration.files;
+
+import me.clovic.brewline.configuration.AbstractOkaeriConfigFile;
+import me.clovic.brewline.configuration.ConfigManager;
+import me.clovic.brewline.configuration.annotation.LocalizedComment;
+import me.clovic.brewline.configuration.annotation.OkaeriConfigFileOptions;
+import me.clovic.brewline.configuration.sector.CauldronSector;
+import me.clovic.brewline.configuration.sector.capsule.ConfigCauldronIngredient;
+import eu.okaeri.configs.annotation.Header;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Header("!!! IMPORTANT: BreweryX configuration files do NOT support external comments! If you add any comments, they will be overwritten !!!")
+@OkaeriConfigFileOptions("cauldron.yml")
+public class CauldronFile extends AbstractOkaeriConfigFile {
+
+    @LocalizedComment("cauldronFile.header")
+    private Map<String, ConfigCauldronIngredient> cauldron = new CauldronSector().getCapsules();
+
+    // Backwards compatibility, merges cauldron ingredients from the default config
+    public Map<String, ConfigCauldronIngredient> getCauldronIngredients() {
+        Map<String, ConfigCauldronIngredient> map = new HashMap<>(this.cauldron);
+        map.putAll(ConfigManager.getConfig(Config.class).getCauldron());
+        return map;
+    }
+
+    // Better setter name
+    public void setCauldronIngredients(Map<String, ConfigCauldronIngredient> cauldron) {
+        this.cauldron = cauldron;
+    }
+}

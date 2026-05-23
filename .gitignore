@@ -1,0 +1,24 @@
+.DS_Store
+
+# IDEs
+/.classpath
+/.project
+/.settings/
+/.idea/
+/.vscode/
+*.iml
+
+# Build output
+/build/
+/bin/
+/target/
+/.gradle/
+/run/
+/dist/
+
+# Local files
+*.log
+*.tmp
+*.swp
+*.swo
+dependency-reduced-pom.xml

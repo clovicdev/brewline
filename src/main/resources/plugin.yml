@@ -1,0 +1,184 @@
+name: Brewline
+main: me.clovic.brewline.BrewlinePlugin
+version: '${version}'
+api-version: '1.20'
+load: POSTWORLD
+folia-supported: true
+website: 'https://github.com/clovicdev/brewline'
+authors: [Clovic, BreweryTeam]
+softdepend:
+  - LWC
+  - LogBlock
+  - WorldGuard
+  - GriefPrevention
+  - ChestShop
+  - Shopkeepers
+  - Towny
+  - Lands
+  - BlockLocker
+  - Slimefun
+  - PlaceholderAPI
+  - Oraxen
+  - ItemsAdder
+  - Nexo
+  - Movecraft
+  - MMOItems
+commands:
+  brewline:
+    description: Opens Brewline tools and brewing commands
+    aliases: [brl]
+permissions:
+  brewline.user:
+    description: Access to normal Brewline brewing actions
+    default: true
+    children:
+      brewline.command.strip: true
+      brewline.barrel.create: true
+      brewline.barrel.open: true
+      brewline.cauldron.time: true
+      brewline.cauldron.insert: true
+      brewline.cauldron.fill: true
+      brewline.command.about: true
+      brewline.command.status: true
+      brewline.command.hub: true
+  brewline.mod:
+    description: Access to moderation tools and haven management
+    children:
+      brewline.user: true
+      brewline.command.havens: true
+      brewline.bypass.logindeny: true
+  brewline.admin:
+    description: Access to admin commands and operational tools
+    default: op
+    children:
+      brewline.update: true
+      brewline.user: true
+      brewline.mod: true
+      brewline.command.status: true
+      brewline.command.status.others: true
+      brewline.command.cork: true
+      brewline.command.purge: true
+      brewline.command.purge.others: true
+      brewline.command.craft: true
+      brewline.command.pour: true
+      brewline.command.pour.others: true
+      brewline.command.duplicate: true
+      brewline.command.discard: true
+      brewline.command.preserve: true
+      brewline.command.calibrate: true
+      brewline.command.refresh: true
+      brewline.command.identify: true
+      brewline.command.addons.refresh: true
+      brewline.command.storage: true
+      brewline.command.refine: true
+      brewline.command.mature: true
+      brewline.command.lab: true
+      brewline.command.diagnostics: true
+      brewline.command.metrics: true
+      brewline.command.admin: true
+  brewline.*:
+    description: Access to every Brewline permission
+    children:
+      brewline.user: true
+      brewline.mod: true
+      brewline.admin: true
+      brewline.bypass.overdrink: true
+      brewline.bypass.teleport: true
+      brewline.bypass.chatdistort: true
+
+  brewline.command.hub:
+    description: Open the Brewline hub
+  brewline.command.status:
+    description: View your Brewline status
+  brewline.command.status.others:
+    description: View another player's Brewline status
+  brewline.command.cork:
+    description: Open the Brewline corking station
+  brewline.command.purge:
+    description: Trigger purge behavior for yourself
+  brewline.command.purge.others:
+    description: Trigger purge behavior for another player
+  brewline.command.havens:
+    description: Manage wakeup havens
+  brewline.command.craft:
+    description: Craft configured brews by command
+  brewline.command.pour:
+    description: Simulate drinking a brew
+  brewline.command.pour.others:
+    description: Simulate another player drinking a brew
+  brewline.command.duplicate:
+    description: Duplicate the held brew
+  brewline.command.discard:
+    description: Delete the held brew
+  brewline.command.preserve:
+    description: Make the held brew static
+  brewline.command.calibrate:
+    description: Set drunkenness and quality values
+  brewline.command.refresh:
+    description: Reload Brewline configuration
+  brewline.command.identify:
+    description: View the config id for the held item
+  brewline.command.addons.refresh:
+    description: Reload Brewline addons
+  brewline.command.about:
+    description: View Brewline version information
+  brewline.command.storage:
+    description: Manage Brewline storage
+  brewline.command.refine:
+    description: Distill the held brew
+  brewline.command.mature:
+    description: Age the held brew
+  brewline.command.lab:
+    description: Simulate a custom brewing run
+  brewline.command.diagnostics:
+    description: View diagnostic information
+  brewline.command.metrics:
+    description: View runtime statistics
+  brewline.command.admin:
+    description: Open the admin dashboard
+
+  brewline.barrel.create:
+    description: Create all Brewline barrel types
+    children:
+      brewline.barrel.create.small: true
+      brewline.barrel.create.big: true
+  brewline.barrel.create.small:
+    description: Create small barrels
+  brewline.barrel.create.big:
+    description: Create large barrels
+  brewline.barrel.open:
+    description: Open all Brewline barrel types
+    children:
+      brewline.barrel.open.small: true
+      brewline.barrel.open.big: true
+      brewline.barrel.open.mc: true
+  brewline.barrel.open.small:
+    description: Open small barrels
+  brewline.barrel.open.big:
+    description: Open large barrels
+  brewline.barrel.open.mc:
+    description: Open Minecraft barrels used by Brewline
+
+  brewline.cauldron.time:
+    description: View cauldron cook time
+  brewline.cauldron.insert:
+    description: Add ingredients to cauldrons
+  brewline.cauldron.fill:
+    description: Fill bottles from Brewline cauldrons
+
+  brewline.bypass.logindeny:
+    description: Login even with extreme drunkenness
+  brewline.bypass.overdrink:
+    description: Bypass overdrink kick behavior
+  brewline.bypass.teleport:
+    description: Bypass login teleport behavior
+  brewline.bypass.chatdistort:
+    description: Prevent chat distortion from drunkenness
+    default: false
+
+  brewline.sensitive.100:
+    description: Alcohol sensitivity percentage
+  brewline.recovery.2:
+    description: Natural drunkenness recovery per minute
+  brewline.update:
+    description: Receive Brewline update notices
