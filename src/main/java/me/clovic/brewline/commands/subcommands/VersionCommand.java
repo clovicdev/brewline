@@ -47,10 +47,11 @@ public class VersionCommand implements SubCommand {
 
         ReleaseChecker rc = ReleaseChecker.getInstance();
 
-        Logging.msg(sender, "&2BreweryX version&7: &av" + rc.localVersion() + " &7(Latest: v" + rc.getResolvedLatestVersion() + ")");
-        Logging.msg(sender, "&2Original authors&7: &aGrafe, TTTheKing, Sn0wStorm");
-        Logging.msg(sender, "&dBreweryX authors&7: &aJsinco, Mitality, Nadwey, Szarkans, Vutka1");
-        Logging.msg(sender, "&2Loaded addons&7: &a" + addonString);
+        Logging.msg(sender, "&6Brewline&7: &av" + rc.localVersion() + " &7(Latest: v" + rc.getResolvedLatestVersion() + ")");
+        Logging.msg(sender, "&6Made by&7: &aClovic");
+        Logging.msg(sender, "&6Baseline&7: &aBreweryX");
+        Logging.msg(sender, "&6Note&7: &aClovic made Brewline using BreweryX as the baseline.");
+        Logging.msg(sender, "&6Loaded addons&7: &a" + (addonString.isEmpty() ? "&7None" : addonString));
     }
 
     @Override
