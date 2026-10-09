@@ -1,6 +1,6 @@
 # Brewline ⚗️
 
-[Brewline Logo](portfolio_gfx/brewline.png)
+![Brewline logo](portfolio_gfx/brewline.png)
 
 Brewline is a brewing plugin for Minecraft servers that want drinks to feel like a real server feature instead of a small side mechanic. It handles cauldron brewing, distilling, barrel aging, configurable recipes, drunkenness, wakeup havens, storage, and clean inventory menus.
 
